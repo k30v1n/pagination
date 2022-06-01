@@ -4,24 +4,27 @@ namespace pagination.Data;
 
 public class DataDbContext : DbContext
 {
-    public DbSet<Seed>? Seeds;
-
-    public DbSet<FirstExampleData>? FirstExampleData { get; set; }
-    public DbSet<SecondExampleData>? SecondExampleData { get; set; }
-    public DbSet<ThirdExampleData>? ThirdExampleData { get; set; }
-    public DbSet<ForthExampleData>? ForthExampleData { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public DbSet<Seed> Seeds { get; set; }
+    public DbSet<FirstExampleData> FirstExampleData { get; set; }
+    public DbSet<SecondExampleData> SecondExampleData { get; set; }
+    public DbSet<ThirdExampleData> ThirdExampleData { get; set; }
+    public DbSet<ForthExampleData> ForthExampleData { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connection = "server=127.0.0.1;uid=root;pwd=root;database=pagination";
         optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
+
+        optionsBuilder.LogTo(Console.WriteLine, minimumLevel: Microsoft.Extensions.Logging.LogLevel.Warning);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Seed>()
-            .HasNoKey()
-            .ToTable("__seeds");
+            .ToTable("__seeds")
+            .HasKey(x => x.ExampleId);
         modelBuilder.Entity<FirstExampleData>()
             .ToTable("1_FirstExample");
         modelBuilder.Entity<SecondExampleData>()

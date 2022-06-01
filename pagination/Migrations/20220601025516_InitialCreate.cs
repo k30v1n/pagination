@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace pagination.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,11 +17,12 @@ namespace pagination.Migrations
                 name: "__seeds",
                 columns: table => new
                 {
-                    Example = table.Column<int>(type: "int", nullable: false),
-                    Applied = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    ExampleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK___seeds", x => x.ExampleId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 

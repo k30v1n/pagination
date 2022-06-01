@@ -90,11 +90,11 @@ namespace pagination.Migrations
 
             modelBuilder.Entity("pagination.Data.Seed", b =>
                 {
-                    b.Property<bool>("Applied")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Example")
+                    b.Property<int>("ExampleId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.HasKey("ExampleId");
 
                     b.ToTable("__seeds", (string)null);
                 });

@@ -1,13 +1,18 @@
-﻿namespace pagination.Data;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record Seed(int Example, bool Applied);
+namespace pagination.Data;
+
+public class Seed
+{
+    public int ExampleId { get; set; }
+}
 
 public class FirstExampleData : UserBase { }
 public class SecondExampleData : UserBase { }
 public class ThirdExampleData : UserBase { }
 public class ForthExampleData : UserBase { }
 
-public abstract class UserBase
+public class UserBase
 {
     public int Id { get; set; }
     public string? FirstName { get; set; }

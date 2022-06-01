@@ -17,4 +17,4 @@ Console.WriteLine("DB migrated");
     seedGeneration.GenerateSeedData(db);
 }
 
-Console.WriteLine("nice");
+Console.WriteLine("Finished");

@@ -11,8 +11,8 @@ using pagination.Data;
 namespace pagination.Migrations
 {
     [DbContext(typeof(DataDbContext))]
-    [Migration("20220526015933_InitialCreation")]
-    partial class InitialCreation
+    [Migration("20220601025516_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -92,11 +92,11 @@ namespace pagination.Migrations
 
             modelBuilder.Entity("pagination.Data.Seed", b =>
                 {
-                    b.Property<bool>("Applied")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("Example")
+                    b.Property<int>("ExampleId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.HasKey("ExampleId");
 
                     b.ToTable("__seeds", (string)null);
                 });
