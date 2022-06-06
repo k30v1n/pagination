@@ -21,7 +21,7 @@ Console.WriteLine("Running benchmarks...");
 
 var benchmark = BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly);
 #if DEBUG
-var summary = benchmark.Run(args, new DebugInProcessConfig());
+var summary = benchmark.Run(args: new string[] { "--filter", "*" }, new DebugInProcessConfig());
 #else
 var summary = benchmark.Run(args, DefaultConfig.Instance);
 #endif

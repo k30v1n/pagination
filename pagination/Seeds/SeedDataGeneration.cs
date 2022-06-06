@@ -18,9 +18,9 @@ public class SeedDataGeneration
         var seedSetups = new SeedSetup[]
         {
             new SeedSetup(1, 1000, "1_FirstExample"),
-            new SeedSetup(2, 10000, "2_SecondExample"),
-            new SeedSetup(3, 100000, "3_ThirdExample"),
-            new SeedSetup(4, 1000000, "4_ForthExample")
+            new SeedSetup(2, 100000, "2_SecondExample"),
+            new SeedSetup(3, 1000000, "3_ThirdExample"),
+            new SeedSetup(4, 5000000, "4_ForthExample")
         };
 
         var faker = GetExampleFaker();
