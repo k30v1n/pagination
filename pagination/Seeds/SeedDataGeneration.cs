@@ -8,13 +8,10 @@ namespace pagination.Seeds;
 
 public class SeedDataGeneration
 {
-    const int SEED = 1;
     record SeedSetup(int ExampleId, int RecordsCount, string TableName);
 
-    public void GenerateSeedData(DataDbContext db)
+    public void GenerateSeedData()
     {
-        var seeds = db.Seeds.ToList();
-
         var seedSetups = new SeedSetup[]
         {
             new SeedSetup(1, 1000, "1_FirstExample"),
@@ -23,45 +20,45 @@ public class SeedDataGeneration
             new SeedSetup(4, 5000000, "4_ForthExample")
         };
 
-        var faker = GetExampleFaker();
+        var faker = CreateExampleFaker();
 
-        foreach (var seedSetup in seedSetups)
+        seedSetups.AsParallel().ForAll(setup =>
         {
-            if (!seeds.Any(x => x.ExampleId == seedSetup.ExampleId))
+            using var seedDbContext = new DataDbContext();
+
+            if (!seedDbContext.Seeds.Any(x => x.ExampleId == setup.ExampleId))
             {
                 var stopwatch = Stopwatch.StartNew();
-                Console.WriteLine($"Example {seedSetup.ExampleId} - Generating {seedSetup.RecordsCount} records...");
+                Console.WriteLine($"Example {setup.ExampleId} - Generating {setup.RecordsCount} records...");
 
-                var data = faker.GenerateLazy(seedSetup.RecordsCount);
+                var data = faker.GenerateLazy(setup.RecordsCount);
 
                 foreach (var batchData in BatchData(data))
                 {
-                    var bulkInsert = new StringBuilder($"INSERT INTO `{seedSetup.TableName}`(`FirstName`,`LastName`,`GrossAmount`,`DateOfBirth`) VALUES");
+                    var bulkInsert = new StringBuilder($"INSERT INTO `{setup.TableName}`(`FirstName`,`LastName`,`GrossAmount`,`DateOfBirth`) VALUES");
                     foreach (var batch in batchData)
                     {
                         bulkInsert.Append($"(\"{batch.FirstName}\",\"{batch.LastName}\",{batch.GrossAmount},\"{batch.DateOfBirth.ToString("yyyy-MM-dd")}\"),");
                     }
-                    
+
                     bulkInsert.Remove(bulkInsert.Length - 1, 1);
                     bulkInsert.Append(";");
 
-                    db.Database.ExecuteSqlRaw(bulkInsert.ToString());
+                    seedDbContext.Database.ExecuteSqlRaw(bulkInsert.ToString());
                 }
-                
 
-                db.Seeds.Add(new Seed { ExampleId = seedSetup.ExampleId });
 
-                Console.WriteLine($"Example {seedSetup.ExampleId} - Applying db changes...");
-                db.SaveChanges();
+                seedDbContext.Seeds.Add(new Seed { ExampleId = setup.ExampleId });
+                seedDbContext.SaveChanges();
 
-                Console.WriteLine($"Example {seedSetup.ExampleId} - records generated in database {seedSetup.RecordsCount} after {stopwatch.ElapsedMilliseconds}ms");
+                Console.WriteLine($"Example {setup.ExampleId} - records generated in database {setup.RecordsCount} after {stopwatch.ElapsedMilliseconds}ms");
             }
-        }
+        });
     }
 
     private static IEnumerable<IEnumerable<UserBase>> BatchData(IEnumerable<UserBase> data)
     {
-        var batchSize = 10000;
+        var batchSize = 100000;
         var total = 0;
 
         while (true)
@@ -76,13 +73,16 @@ public class SeedDataGeneration
         }
     }
 
-    private static Faker<UserBase> GetExampleFaker() =>
-        new Faker<UserBase>().Rules((faker, data) =>
-        {
-            var person = new Bogus.Person(seed: faker.UniqueIndex);
-            data.FirstName = person.FirstName;
-            data.LastName = person.LastName;
-            data.DateOfBirth = person.DateOfBirth;
-            data.GrossAmount = person.Random.Decimal(max: 30000);
-        });
+    private static Faker<UserBase> CreateExampleFaker() => new Faker<UserBase>().Rules((faker, data) =>
+    {
+        var person = new Bogus.Person(seed: faker.UniqueIndex);
+        data.FirstName = person.FirstName;
+        data.LastName = person.LastName;
+        data.DateOfBirth = person.DateOfBirth;
+        data.GrossAmount = person.Random.Decimal(max: 30000);
+
+        // Generating sortable+unique column for cursor pagination+sorting
+        // mapping to EF just for example purposes
+        data.Sorting_FirstName = person.FirstName + Guid.NewGuid().ToString();
+    });
 }

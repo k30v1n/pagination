@@ -37,6 +37,9 @@ namespace pagination.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Sorting_FirstName")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("1_FirstExample", (string)null);
@@ -60,6 +63,9 @@ namespace pagination.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Sorting_FirstName")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("4_ForthExample", (string)null);
@@ -81,6 +87,9 @@ namespace pagination.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Sorting_FirstName")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -115,6 +124,9 @@ namespace pagination.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Sorting_FirstName")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

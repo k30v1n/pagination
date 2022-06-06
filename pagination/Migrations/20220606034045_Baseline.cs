@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace pagination.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Baseline : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,7 +37,9 @@ namespace pagination.Migrations
                     LastName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GrossAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    Sorting_FirstName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -56,7 +58,9 @@ namespace pagination.Migrations
                     LastName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GrossAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    Sorting_FirstName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -75,7 +79,9 @@ namespace pagination.Migrations
                     LastName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GrossAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    Sorting_FirstName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -94,7 +100,9 @@ namespace pagination.Migrations
                     LastName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GrossAmount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    Sorting_FirstName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {

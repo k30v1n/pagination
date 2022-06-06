@@ -20,4 +20,9 @@ public class UserBase
     public decimal GrossAmount { get; set; }
     public DateTimeOffset DateOfBirth { get; set; }
 
+    /// <summary>
+    /// Sortable FirstName column + Unique for cursor pagination purpose
+    /// </summary>
+    public string? Sorting_FirstName { get; set; }
+
 }
