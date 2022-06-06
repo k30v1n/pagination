@@ -28,4 +28,5 @@ var summary = benchmark.Run(args: args, new DebugInProcessConfig());
 var summary = benchmark.Run(args, DefaultConfig.Instance);
 #endif
 
+sw.Stop();
 Console.WriteLine($"Finished - after {sw.Elapsed.TotalMinutes} minutes");

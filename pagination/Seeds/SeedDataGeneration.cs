@@ -31,14 +31,14 @@ public class SeedDataGeneration
                 var stopwatch = Stopwatch.StartNew();
                 Console.WriteLine($"Example {setup.ExampleId} - Generating {setup.RecordsCount} records...");
 
-                var data = faker.GenerateLazy(setup.RecordsCount);
+                var generatedData = faker.GenerateLazy(setup.RecordsCount);
 
-                foreach (var batchData in BatchData(data))
+                foreach (var batchData in BatchData(generatedData))
                 {
-                    var bulkInsert = new StringBuilder($"INSERT INTO `{setup.TableName}`(`FirstName`,`LastName`,`GrossAmount`,`DateOfBirth`) VALUES");
-                    foreach (var batch in batchData)
+                    var bulkInsert = new StringBuilder($"INSERT INTO `{setup.TableName}`(`FirstName`,`LastName`,`GrossAmount`,`DateOfBirth`, `Sorting_FirstName`) VALUES");
+                    foreach (var dataItem in batchData)
                     {
-                        bulkInsert.Append($"(\"{batch.FirstName}\",\"{batch.LastName}\",{batch.GrossAmount},\"{batch.DateOfBirth.ToString("yyyy-MM-dd")}\"),");
+                        bulkInsert.Append($"(\"{dataItem.FirstName}\",\"{dataItem.LastName}\",{dataItem.GrossAmount},\"{dataItem.DateOfBirth.ToString("yyyy-MM-dd")}\",\"{dataItem.Sorting_FirstName}\"),");
                     }
 
                     bulkInsert.Remove(bulkInsert.Length - 1, 1);
@@ -58,7 +58,7 @@ public class SeedDataGeneration
 
     private static IEnumerable<IEnumerable<UserBase>> BatchData(IEnumerable<UserBase> data)
     {
-        var batchSize = 100000;
+        var batchSize = 10000;
         var total = 0;
 
         while (true)
