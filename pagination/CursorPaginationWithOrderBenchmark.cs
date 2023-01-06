@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using Microsoft.EntityFrameworkCore;
 using pagination.Data;
 
@@ -19,30 +14,35 @@ namespace pagination
         public void Dispose() => _dbContext.Dispose();
 
 
-        public void RunCursorPaginationPagination<T>(string table, DbSet<T> dbSet) where T : UserBase
+        public List<T>? RunCursorPaginationPagination<T>(string table, DbSet<T> dbSet) where T : UserBase
         {
             string cursor = string.Empty;
 
+            List<T>? lastPage = null;
+
             for (int i = 0; i < TOTAL_PAGES_TO_NAVIGATE; i++)
             {
-                var result = dbSet
-                    .FromSqlRaw($"SELECT * FROM pagination.{table} where Sorting_FirstName > '{cursor}' order by Sorting_FirstName asc LIMIT {ITEMS_PER_PAGE}")
+                lastPage = dbSet
+                    .FromSqlRaw($"SELECT Id, FirstName, LastName, GrossAmount, DateOfBirth, Sorting_FirstName FROM pagination.{table} where Sorting_FirstName > '{cursor}' order by Sorting_FirstName asc LIMIT {ITEMS_PER_PAGE}")
+                    .AsNoTracking()
                     .ToList();
 
-                cursor = result.Last()?.Sorting_FirstName?.ToString() ?? string.Empty;
+                cursor = lastPage.Last()?.Sorting_FirstName?.ToString() ?? string.Empty;
             }
+
+            return lastPage;
         }
 
         [Benchmark]
-        public void RunCursorPaginationPagination_OrderByFirstName_Over_1k() => RunCursorPaginationPagination("1_FirstExample", _dbContext.FirstExampleData);
+        public List<FirstExampleData>? RunCursorPaginationPagination_OrderByFirstName_Over_1k() => RunCursorPaginationPagination("1_FirstExample", _dbContext.FirstExampleData);
 
         [Benchmark]
-        public void RunCursorPaginationPagination_OrderByFirstName_Over_100k() => RunCursorPaginationPagination("2_SecondExample", _dbContext.SecondExampleData);
+        public List<SecondExampleData>? RunCursorPaginationPagination_OrderByFirstName_Over_100k() => RunCursorPaginationPagination("2_SecondExample", _dbContext.SecondExampleData);
 
         [Benchmark]
-        public void RunCursorPaginationPagination_OrderByFirstName_Over_1million() => RunCursorPaginationPagination("3_ThirdExample", _dbContext.ThirdExampleData);
+        public List<ThirdExampleData>? RunCursorPaginationPagination_OrderByFirstName_Over_1million() => RunCursorPaginationPagination("3_ThirdExample", _dbContext.ThirdExampleData);
 
         [Benchmark]
-        public void RunCursorPaginationPagination_OrderByFirstName_Over_5million() => RunCursorPaginationPagination("4_ForthExample", _dbContext.ForthExampleData);
+        public List<ForthExampleData>? RunCursorPaginationPagination_OrderByFirstName_Over_5million() => RunCursorPaginationPagination("4_ForthExample", _dbContext.ForthExampleData);
     }
 }

@@ -14,29 +14,35 @@ namespace pagination
         public void Dispose() => _dbContext.Dispose();
 
 
-        public void RunLimitOffsetPagination<T>(string table, DbSet<T> dbSet) where T: class
+        public List<T>? RunLimitOffsetPagination<T>(string table, DbSet<T> dbSet) where T: class
         {
             var offset = 0;
 
+            List<T>? lastPage = null;
+
             for (int i = 0; i < TOTAL_PAGES_TO_NAVIGATE; i++)
             {
-                dbSet.FromSqlRaw($"SELECT * FROM pagination.{table} order by FirstName LIMIT {offset}, {ITEMS_PER_PAGE}")
+                lastPage = dbSet
+                    .FromSqlRaw($"SELECT Id, FirstName, LastName, GrossAmount, DateOfBirth, Sorting_FirstName FROM pagination.{table} order by FirstName LIMIT {offset}, {ITEMS_PER_PAGE}")
+                    .AsNoTracking()
                     .ToList();
 
                 offset += ITEMS_PER_PAGE;
             }
+
+            return lastPage;
         }
 
         [Benchmark]
-        public void RunLimitOffsetPagination_OrderByFirstName_Over_1k() => RunLimitOffsetPagination("1_FirstExample", _dbContext.FirstExampleData);
+        public List<FirstExampleData>? RunLimitOffsetPagination_OrderByFirstName_Over_1k() => RunLimitOffsetPagination("1_FirstExample", _dbContext.FirstExampleData);
 
         [Benchmark]
-        public void RunLimitOffsetPagination_OrderByFirstName_Over_100k() => RunLimitOffsetPagination("2_SecondExample", _dbContext.SecondExampleData);
+        public List<SecondExampleData>? RunLimitOffsetPagination_OrderByFirstName_Over_100k() => RunLimitOffsetPagination("2_SecondExample", _dbContext.SecondExampleData);
 
         [Benchmark]
-        public void RunLimitOffsetPagination_OrderByFirstName_Over_1million() => RunLimitOffsetPagination("3_ThirdExample", _dbContext.ThirdExampleData);
+        public List<ThirdExampleData>? RunLimitOffsetPagination_OrderByFirstName_Over_1million() => RunLimitOffsetPagination("3_ThirdExample", _dbContext.ThirdExampleData);
 
         [Benchmark]
-        public void RunLimitOffsetPagination_OrderByFirstName_Over_5million() => RunLimitOffsetPagination("4_ForthExample", _dbContext.ForthExampleData);
+        public List<ForthExampleData>? RunLimitOffsetPagination_OrderByFirstName_Over_5million() => RunLimitOffsetPagination("4_ForthExample", _dbContext.ForthExampleData);
     }
 }

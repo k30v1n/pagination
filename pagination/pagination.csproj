@@ -5,16 +5,13 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+    <Optimize>true</Optimize>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+		<PackageReference Include="BenchmarkDotNet" Version="0.13.3" />
 		<PackageReference Include="Bogus" Version="34.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1">
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2">
 		  <GeneratePathProperty>True</GeneratePathProperty>
 		</PackageReference>
 	</ItemGroup>

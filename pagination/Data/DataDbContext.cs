@@ -15,7 +15,11 @@ public class DataDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connection = "server=127.0.0.1;uid=root;pwd=root;database=pagination";
-        optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
+        optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection), options =>
+        {
+            options.EnableRetryOnFailure(10);
+        })
+            .EnableDetailedErrors(true);
 
         optionsBuilder.LogTo(Console.WriteLine, minimumLevel: Microsoft.Extensions.Logging.LogLevel.Warning);
     }
