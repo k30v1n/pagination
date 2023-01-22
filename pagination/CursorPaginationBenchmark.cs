@@ -27,6 +27,8 @@ namespace pagination
                     .AsNoTracking()
                     .ToList();
 
+                if (lastPage.Count == 0) break;
+
                 cursor = lastPage.Last()?.Id.ToString() ?? string.Empty;
             }
 

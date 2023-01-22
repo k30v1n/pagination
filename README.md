@@ -81,6 +81,28 @@ Global total time: 00:04:45 (285.06 sec), executed benchmarks: 4
 
 Database CPU 100%
 ```
+
+# Test using 100 page size + navigation through 100 pages
+
+comparison only between paginations and no ordering involved
+
+LIMIT OFFSET  - DATABASE GOT 61%+
+|                                 Method |     Mean |   Error |   StdDev |
+|--------------------------------------- |---------:|--------:|---------:|
+|       RunLimitOffsetPagination_Over_1k | 234.5 ms | 4.65 ms | 12.33 ms |
+|     RunLimitOffsetPagination_Over_100k | 463.7 ms | 9.20 ms | 14.05 ms |
+| RunLimitOffsetPagination_Over_1million | 461.4 ms | 8.93 ms | 11.29 ms |
+| RunLimitOffsetPagination_Over_5million | 464.0 ms | 9.01 ms |  8.85 ms |
+
+
+CURSOR PAGINATION - DATABASE 27%
+|                                      Method |      Mean |    Error |    StdDev |    Median |
+|-------------------------------------------- |----------:|---------:|----------:|----------:|
+|       RunCursorPaginationPagination_Over_1k |  22.98 ms | 0.342 ms |  0.285 ms |  22.92 ms |
+|     RunCursorPaginationPagination_Over_100k | 197.84 ms | 3.872 ms | 10.201 ms | 194.55 ms |
+| RunCursorPaginationPagination_Over_1million | 192.28 ms | 3.827 ms |  5.109 ms | 193.91 ms |
+| RunCursorPaginationPagination_Over_5million | 193.53 ms | 3.861 ms |  5.285 ms | 194.67 ms |
+
 ## Running 
 
 Database should be running
